@@ -3,4 +3,49 @@
 ROUTING ANGUKAR :::: https://angular.io/tutorial/toh-pt5
 
 
+https://angular.io/guide/quickstart
+
+
+Step1.
+
+ng new my-app
+
+Step2.
+
+cd my-app
+ng serve --open
+
+
+Routing
+------------------
+ng generate module app-routing --flat --module=app
+
+src/app/app-routing.module.ts (generated)
+
+import { NgModule, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { RouterModule, Routes } from '@angular/router';
+const routes: Routes = [
+  { path: 'dashboard', component: DashboardComponent }
+];
+@NgModule({
+  exports: [ RouterModule ],
+  imports: [ RouterModule.forRoot(routes) ],
+})
+export class AppRoutingModule {}
+ 
+
+
+New Component  creation
+--------------------------------
+ng generate component dashboard(component name)
+
+
+
+
+
+
+
+
 
