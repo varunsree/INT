@@ -42,6 +42,122 @@ New Component  creation
 ng generate component dashboard(component name)
 
 
+=====================================================
+****************************************************************************************************************************************************
+
+Form Creation
+
+<form class="new-form" [formGroup]="createStore">
+                                    <div class="form-group row">
+                                        <label class="col-md-4 col-form-label" style="font-weight: 700;">Store Type</label>
+                                        <div class="col-md-8 row">
+                                            <label style="padding-top: 10px;"> 
+                                                <input type="radio" formControlName="storeType" name="storeType" value="{{storeTypeObj.storeTypePortal}}" (click)="displayTestDataFlg(storeTypeObj.storeTypePortal)" [attr.disabled]="disableOptionEditStore ? 'true' : null" /> Portal Only &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" [ngClass]="displayFieldCssCreateStore('storeName')">
+                                        <label class="col-form-label" style="font-weight: 700;">Store Name<span class="required"> *</span>
+                                           
+                                        </label>
+                                        <div>
+                                            <input type="text" class="form-control" id="storeName" formControlName="storeName" (keyup)="clearNameValidationMessage(3)" [attr.disabled]="!editStoreNameFlag ? 'true' : null">
+                                            
+                                        </div>
+                                    </div>                                  
+                                    <div class="form-group row" *ngIf="testTagDisplayStoreCreation">
+                                        <label class="col-md-5 col-form-label" style="font-weight: 700;">{{testDataLabel}}</label>
+                                        <div class="col-md-7 row">
+                                            <label style="padding-top: 10px;"> 
+                                                <input type="checkbox" [checked]="defaultTestDataFlag" formControlName="testDataTag" name="testDataTag" [attr.disabled]="!createStoreFlag ? 'true' : null" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button *ngIf="createStoreFlag" type="button" class="btn btn-secondary" (click)="closeCreateStoreModal()">Close</button>
+                                        <button *ngIf="!createStoreFlag" [disabled]="disableCloseButtonStore" type="button" class="btn btn-secondary" (click)="disableCloseButtonStore ? '' : closeCreateStoreModal()">Close</button>
+                                        <button type="button" *ngIf="createStoreFlag" [disabled]="showSpinnerStoreButton" (click)="createStoreFlag ? onSubmit('') : onUpdateStore()" class="btn btn-primary pointer"><em *ngIf="showSpinnerStoreButton" class="fa fa-spinner fa-pulse fa-1x fa-fw"></em> {{createStoreFlag ? 'Submit' : 'Update' }} </button>&nbsp;
+                                    </div>
+                                </form>
+
+
+Component :::
+
+import { FormControl, FormGroup, Validators, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
+
+export class StoreSearcherComponent implements OnInit {
+
+  createStore: FormGroup;
+
+
+
+this.createStore = new FormGroup({
+      storeType: new FormControl('', Validators.required),
+      testDataTag: new FormControl(''),
+      storeGroup: new FormControl(''),
+      storeName: new FormControl('', Validators.required),
+      brand: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      dmsCode: new FormControl('', Validators.required),
+      assignedTo: new FormControl(''),
+      assignedToSalesPerson: new FormControl('')
+    });
+
+
+get value
+
+let objects360: any = {
+          sgCompanyId: this.selectedStoreGroupCompanyId,
+          storeName: this.createStore.get('storeName').value,
+          brandName: this.createStore.get('brand').value[0].item,
+          state: this.createStore.get('state').value[0].item,
+          storeType: this.createStore.get('storeType').value,
+          testTag: this.createStore.get('testDataTag').value,
+          dmsCode: this.createStore.get('dmsCode').value[0].itemName
+        }
+
+***********************************************************************
+
+http :: ajax call
+=======================================
+
+import { Component } from '@angular/core';
+import { Http } from '@angular/http';
+
+@Component({
+  selector: 'http-app',
+  templateUrl: 'people.html'
+})
+class PeopleComponent {
+  constructor(http: Http) {
+    http.get('people.json')
+      // Call map on the response observable to get the parsed people object
+      .map(res => res.json())
+      // Subscribe to the observable to get the parsed people object and attach it to the
+      // component
+      .subscribe(people => this.people = people);
+  }
+}
+
+//POST
+nSubmit(value: any) {
+    //console.log(value.message);
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    let options = new RequestOptions({ headers: headers });
+    let body = JSON.stringify(value);
+    this.http.post('127.0.0.1/myProject/insertData.php', body, headers)
+                .subscribe(
+                    () => {alert("Success")}, //For Success Response
+                    err => {console.error(err)} //For Error Response
+                );                
+    }   
+
+
+********************************************************************************************
+
+
+
+
 
 
 
